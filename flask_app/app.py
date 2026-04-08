@@ -69,8 +69,8 @@ def normalize_text(text):
 
 # Below code block is for local use
 # -------------------------------------------------------------------------------------
-#mlflow.set_tracking_uri('https://dagshub.com/buzzworm47/End-to-end-imdb-MLops.mlflow')
-#dagshub.init(repo_owner='buzzworm47', repo_name='End-to-end-imdb-MLops', mlflow=True)
+# mlflow.set_tracking_uri('https://dagshub.com/buzzworm47/End-to-end-imdb-MLops.mlflow')
+# dagshub.init(repo_owner='buzzworm47', repo_name='End-to-end-imdb-MLops', mlflow=True)
 # -------------------------------------------------------------------------------------
 
 # Below code block is for production use
@@ -78,7 +78,7 @@ def normalize_text(text):
 # Set up DagsHub credentials for MLflow tracking
 dagshub_token = os.getenv("CAPSTONE_TEST")
 if not dagshub_token:
-    raise EnvironmentError("CAPSTONE_TEST environment variable is not set")
+   raise EnvironmentError("CAPSTONE_TEST environment variable is not set")
 
 os.environ["MLFLOW_TRACKING_USERNAME"] = dagshub_token
 os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
@@ -86,7 +86,7 @@ os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
 dagshub_url = "https://dagshub.com"
 repo_owner = "buzzworm47"
 repo_name = "End-to-end-imdb-MLops"
-# Set up MLflow tracking URI
+#Set up MLflow tracking URI
 mlflow.set_tracking_uri(f'{dagshub_url}/{repo_owner}/{repo_name}.mlflow')
 # -------------------------------------------------------------------------------------
 
@@ -124,7 +124,7 @@ model_version = get_latest_model_version(model_name)
 model_uri = f'models:/{model_name}/{model_version}'
 print(f"Fetching model from: {model_uri}")
 model = mlflow.pyfunc.load_model(model_uri)
-vectorizer = pickle.load(open('models/vectorizer.pkl', 'rb'))
+vectorizer = pickle.load(open('vectorizer.pkl', 'rb'))
 
 # Routes
 @app.route("/")
@@ -146,6 +146,7 @@ def predict():
     # Convert to features
     features = vectorizer.transform([text])
     features_df = pd.DataFrame(features.toarray(), columns=[str(i) for i in range(features.shape[1])])
+    print(features_df.shape)
 
     # Predict
     result = model.predict(features_df)
