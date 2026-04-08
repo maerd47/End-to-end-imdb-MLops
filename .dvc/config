@@ -1,4 +1,4 @@
 [core]
     remote = myremote
 ['remote "myremote"']
-    url = s3://complaints-datagrid
+    url = s3://sagemaker-us-east-1-996203102900/imdb_data/
