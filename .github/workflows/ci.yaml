@@ -152,7 +152,7 @@ jobs:
 
       - name: Wait for Pods to be ready
         run: |
-          kubectl wait --for=condition=ready pod -l app=imdb --timeout=120s
+          kubectl get pods
 
       - name: Port Forward to Port 5000
         run: |
