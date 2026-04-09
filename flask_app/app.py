@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-import mlflow
+#import mlflow
 import pickle
 import os
 import pandas as pd
@@ -9,7 +9,7 @@ from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 import string
 import re
-import dagshub
+#import dagshub
 
 import warnings
 warnings.simplefilter("ignore", UserWarning)
@@ -76,18 +76,18 @@ def normalize_text(text):
 # Below code block is for production use
 # -------------------------------------------------------------------------------------
 # Set up DagsHub credentials for MLflow tracking
-dagshub_token = os.getenv("CAPSTONE_TEST")
-if not dagshub_token:
-   raise EnvironmentError("CAPSTONE_TEST environment variable is not set")
+# dagshub_token = os.getenv("CAPSTONE_TEST")
+# if not dagshub_token:
+#    raise EnvironmentError("CAPSTONE_TEST environment variable is not set")
 
-os.environ["MLFLOW_TRACKING_USERNAME"] = dagshub_token
-os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
+# os.environ["MLFLOW_TRACKING_USERNAME"] = dagshub_token
+# os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
 
-dagshub_url = "https://dagshub.com"
-repo_owner = "buzzworm47"
-repo_name = "End-to-end-imdb-MLops"
-#Set up MLflow tracking URI
-mlflow.set_tracking_uri(f'{dagshub_url}/{repo_owner}/{repo_name}.mlflow')
+# dagshub_url = "https://dagshub.com"
+# repo_owner = "buzzworm47"
+# repo_name = "End-to-end-imdb-MLops"
+# #Set up MLflow tracking URI
+# mlflow.set_tracking_uri(f'{dagshub_url}/{repo_owner}/{repo_name}.mlflow')
 # -------------------------------------------------------------------------------------
 
 
@@ -112,19 +112,20 @@ PREDICTION_COUNT = Counter(
 
 # ------------------------------------------------------------------------------------------
 # Model and vectorizer setup
-model_name = "my_model"
-def get_latest_model_version(model_name):
-    client = mlflow.MlflowClient()
-    latest_version = client.get_latest_versions(model_name, stages=["Staging"])
-    if not latest_version:
-        latest_version = client.get_latest_versions(model_name, stages=["None"])
-    return latest_version[0].version if latest_version else None
+# model_name = "my_model"
+# def get_latest_model_version(model_name):
+#     client = mlflow.MlflowClient()
+#     latest_version = client.get_latest_versions(model_name, stages=["Staging"])
+#     if not latest_version:
+#         latest_version = client.get_latest_versions(model_name, stages=["None"])
+#     return latest_version[0].version if latest_version else None
 
-model_version = get_latest_model_version(model_name)
-model_uri = f'models:/{model_name}/{model_version}'
-print(f"Fetching model from: {model_uri}")
-model = mlflow.pyfunc.load_model(model_uri)
-vectorizer = pickle.load(open('models/vectorizer.pkl', 'rb'))
+# model_version = get_latest_model_version(model_name)
+# model_uri = f'models:/{model_name}/{model_version}'
+# print(f"Fetching model from: {model_uri}")
+# model = mlflow.pyfunc.load_model(model_uri)
+model = pickle.load(open('model.pkl', 'rb'))
+vectorizer = pickle.load(open('vectorizer.pkl', 'rb'))
 
 # Routes
 @app.route("/")
@@ -166,5 +167,5 @@ def metrics():
     return generate_latest(registry), 200, {"Content-Type": CONTENT_TYPE_LATEST}
 
 if __name__ == "__main__":
-    # app.run(debug=True) # for local use
-    app.run(debug=True, host="0.0.0.0", port=5000)  # Accessible from outside Docker
+    app.run(debug=True) # for local use
+    #app.run(debug=True, host="0.0.0.0", port=5000)  # Accessible from outside Docker
