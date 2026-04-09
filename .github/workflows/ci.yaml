@@ -28,7 +28,7 @@ jobs:
           pip install -r requirements.txt
 
 
-jobs:
+
   project-pipeline:
     runs-on: ubuntu-latest
 
@@ -66,7 +66,7 @@ jobs:
         run: python -m unittest tests/test_flask_app.py
 
 
-  jobs:
+  
   project-AWS-deployment:
     runs-on: ubuntu-latest
 
