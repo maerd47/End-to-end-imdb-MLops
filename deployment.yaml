@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: flask-app
+  name: imdb
   labels:
-    app: flask-app
+    app: imdb
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: flask-app
+      app: imdb
   template:
     metadata:
       labels:
-        app: flask-app
+        app: imdb
     spec:
       containers:
-      - name: flask-app
-        image: 020866158197.dkr.ecr.us-east-1.amazonaws.com/flask-app:latest
+      - name: imdb
+        image: 996203102900.dkr.ecr.us-east-1.amazonaws.com/imdb:latest
         ports:
         - containerPort: 5000
         resources:
@@ -41,7 +41,7 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    app: flask-app
+    app: imdb
   ports:
     - name: http
       protocol: TCP

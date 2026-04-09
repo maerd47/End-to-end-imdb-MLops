@@ -1,0 +1,7 @@
+apiVersion: apps/v1
+kind: Deployment
+
+containers:
+      - name: flask-app
+        image: 996203102900.dkr.ecr.us-east-1.amazonaws.com/imdb:latest
+        imagePullPolicy: Always
