@@ -148,3 +148,23 @@ jobs:
       - name: Deploy to kubernetes
         run: |
           kubectl apply -f deployment.yaml
+
+
+      - name: Wait for Pods to be ready
+        run: |
+          kubectl wait --for=condition=ready pod -l app=imdb --timeout=120s
+
+      - name: Port Forward to Port 5000
+        run: |
+          # Start port-forward in background
+          kubectl port-forward deployment/web 5000:5000 & 
+          # Give it a moment to establish the tunnel
+          sleep 10 
+
+      - name: Test Model Inference (POST)
+        run: |
+          RESPONSE=$(curl -X POST http://localhost:5000/predict \
+            -H "Content-Type: application/json" \
+            -d '{"review_text": "This movie was absolutely fantastic! The acting was superb."}' \
+            --fail --show-error)
+          echo "Response: $RESPONSE"
