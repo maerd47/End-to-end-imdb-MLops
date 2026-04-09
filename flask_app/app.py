@@ -124,8 +124,8 @@ PREDICTION_COUNT = Counter(
 # model_uri = f'models:/{model_name}/{model_version}'
 # print(f"Fetching model from: {model_uri}")
 # model = mlflow.pyfunc.load_model(model_uri)
-model = pickle.load(open('model.pkl', 'rb'))
-vectorizer = pickle.load(open('vectorizer.pkl', 'rb'))
+model = pickle.load(open('models/model.pkl', 'rb'))
+vectorizer = pickle.load(open('models/vectorizer.pkl', 'rb'))
 
 # Routes
 @app.route("/")
