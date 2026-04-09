@@ -158,7 +158,7 @@ jobs:
       - name: Port Forward to Port 5000
         run: |
           # Start port-forward in background
-          kubectl port-forward deployment/web 5000:5000 & 
+          kubectl port-forward deployment/imdb 5000:5000 & 
           # Give it a moment to establish the tunnel
           sleep 10 
 
