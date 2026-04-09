@@ -27,10 +27,17 @@ jobs:
         run: |
           pip install -r requirements.txt
 
+      - name: run pipeline
+        env:
+          CAPSTONE_TEST: ${{ secrets.CAPSTONE_TEST }}
+        run: |
+          dvc repro
+
 
 
   project-pipeline:
     runs-on: ubuntu-latest
+    needs: project-testing
 
     steps:
       - name: checkout code
@@ -41,11 +48,7 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: run pipeline
-        env:
-          CAPSTONE_TEST: ${{ secrets.CAPSTONE_TEST }}
-        run: |
-          dvc repro
+      
 
       - name: Run model tests
         env:
@@ -69,6 +72,7 @@ jobs:
   
   project-AWS-deployment:
     runs-on: ubuntu-latest
+    needs: project-pipeline
 
     steps:
       - name: checkout code
@@ -108,6 +112,25 @@ jobs:
         uses: azure/setup-kubectl@v3
         with:
           version: 'latest'
+
+
+      
+      
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create k8s Kind Cluster
+        uses: helm/kind-action@v1.10.0
+        with:
+          cluster_name: kind  # The name of your cluster
+
+      - name: Verify Cluster
+        run: |
+          kubectl cluster-info
+          kubectl get nodes
+      
+
+
 
       - name: Create Kubernetes Secret
         run: |
