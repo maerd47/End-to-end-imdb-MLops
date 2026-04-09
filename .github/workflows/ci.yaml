@@ -152,7 +152,7 @@ jobs:
 
       - name: Wait for Pods to be ready
         run: |
-          kubectl wait --timeout=120s
+          sleep 120
           kubectl get pods
 
       - name: Port Forward to Port 5000
