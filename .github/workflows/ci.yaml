@@ -90,7 +90,7 @@ jobs:
   
   project-AWS-deployment:
     runs-on: ubuntu-latest
-    needs: project-push-image
+    needs: project-testing
 
     steps:
       - name: checkout code
